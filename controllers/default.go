@@ -13,8 +13,16 @@ type MainController struct {
 func (c *MainController) Get() {
 	uid := c.GetString("uid")
 	serviceCode := c.GetString("servicecode")
-	println("uid: " + uid)
-	println("ServiceCode: " + serviceCode)
-	c.Data["Json"] = uid
-	c.Ctx.WriteString(models.GetUIDList("hahah"))
+	if serviceCode != "" && uid != "" {
+		msg, err := models.ReadFile("/Users/tzduan/Other/java/MockServer/userdata/" + uid + "/" + serviceCode + ".txt")
+		// _, _ := models.ReadAll("/Users/tzduan/Other/java/MockServer/userdata/" + uid + "/" + serviceCode + ".txt")
+		if err == nil {
+			c.Ctx.WriteString(msg)
+		} else {
+			c.Ctx.WriteString("")
+		}
+	} else {
+		c.Ctx.WriteString("Success")
+	}
+
 }
